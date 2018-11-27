@@ -36,9 +36,11 @@ module BattleshipFSM(
                                playerB_LD=4, playerB_Attack=5, Redo_playerB=6,
                     playerA_win=7, playerB_win=8;
                     
-     always_ff @ (posedge clk)
+     always_ff @ (posedge clk, posedge clr)
                           begin
                               PS <= NS;
+                              if (clr==1)
+                                PS=load_st;
                           end
      
      
