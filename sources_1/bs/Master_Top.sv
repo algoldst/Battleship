@@ -26,7 +26,8 @@ module Master_Top(
         output clr,
         output [15:0] A_Attack,
         output [7:0] seg,
-        output [3:0] an
+        output [3:0] an,
+        output ST
         );
         
         //declare all of the interconnects
@@ -70,5 +71,7 @@ module Master_Top(
         //assign CLR output
         assign clr = t2;
         
+        //assign ST output
+        assign ST = t3;
         
 endmodule
