@@ -48,7 +48,7 @@ module BattleshipFSM(
      begin
      
      //initialize outputs to zero
-     LDR1A=0; LDR1B=0; LDR2A=0; LDR2B=0; DispA=0; DispB=0; ST=0;
+     LDR1A=0; LDR1B=0; LDR2A=0; LDR2B=0; DispA=0; DispB=0; ST=0; 
      
      //list what happens in each of the states
      //if CLR goes high, moves back to load state
@@ -56,6 +56,8 @@ module BattleshipFSM(
      
             load_st:
                 begin
+                //Reset values if coming from other state.
+                LDR2A=0; LDR2B=0; ST=0; 
                 //this is where the players input their ship positions.
                 //moves out of this state when both players press BTN1
                 LDR1A=1;
