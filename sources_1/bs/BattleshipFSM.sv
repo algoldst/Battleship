@@ -22,7 +22,7 @@ module BattleshipFSM(
     input OKB,
     output logic LDR1B,
     output logic LDR2B,
-    output logic DispB,
+    output logic [2:0] DispB,
     output logic ST,
     output logic LDR1A,
     output logic LDR2A,

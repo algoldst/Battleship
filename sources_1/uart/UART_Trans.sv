@@ -11,7 +11,7 @@
 // propDelayOffset: The UART_Rec has a delay between the time it receives the "sending" signal and when it can first accept bits from the bitstream. This delay causes Trans to wait # sclk cycles.
 module UART_Trans #(parameter packetSize=4, cycleDiv=100, propDelayOffset=0)(
     input [packetSize-1:0] data,
-    input clk, sendBtn,
+    input clk, sendBtn, // user presses sendBtn when they want to begin sending. Value is only going to be received upon release.
     output .bsOut(dOut[0]), // maps .dOut[0](bsOut) <-- except that the syntax is incorrect. Indices only allowed inside (), so the mapping is done here instead of in the ShiftReg module instantiation.
     output sendSig //brief high signal that alerts UART_Rec to begin accepting bitstream data
     );

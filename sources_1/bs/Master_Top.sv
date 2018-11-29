@@ -11,7 +11,7 @@
 module Master_Top(
         input clk,
         input [15:0] A,
-        input [15:0] B,
+        input [15:0] B, //slave-->master
         input BTN1A,
         input BTN1B,
         input BTN2A,
@@ -24,10 +24,11 @@ module Master_Top(
         output LDR2B,
         output [2:0] DispB,
         output clr,
-        output [15:0] A_Attack,
+        output [15:0] A_Attack, //master-->slave, signal from t5 on LDR2A (look at fsm)
         output [7:0] seg,
         output [3:0] an,
-        output ST
+        output ST,
+        output UART_Activate // acts as "button press" to activate UART_Trans
         );
         
         //declare all of the interconnects
