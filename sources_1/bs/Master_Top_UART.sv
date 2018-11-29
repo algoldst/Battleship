@@ -27,17 +27,23 @@ module Master_Top_UART(
     output MasSlav_Sig, //sending signal used by UART_Trans. This comes from t5 on LDR2A in Master_Top
     output [7:0] seg,
     output [3:0] an,
-    output ST
+    output ST,
+    output sendClk //to send clk signal to slave basys
         );
+assign sendClk = clk;
+logic sclk;
+ClockDiv #(2000) uartClk(.clk, .sclk(sclk));
 
+// UART for B input
 logic [15:0] t_B; //interconnect uart_rec-->mastertop
-UART_Rec #(16,100) rec(.clk, .bsIn(SlavMas_B), .recSig(SlavMas_Sig), .data(t_B));        
+UART_Rec #(16,100) rec(.clk, .bsIn(SlavMas_B), .recSig(SlavMas_Sig), .data(t_B));    
 
+// UART for A_Attack output    
 logic t_UART_Activate; //interconnects mastertop<-->uart_trans
 logic [15:0] t_A_Attack;
 UART_Trans #(16,100,1) trans(.clk, .data(t_A_Attack), .sendBtn(t_UART_Activate), .bsOut(MasSlav_A_Attack), .sendSig(MasSlav_Sig));
 
-Master_Top mastertop(.clk, .A, .B(t_B), .BTN1A, .BTN1B, .BTN2A, .BTN2B, .LivB, .BTN3A, .BTN3B, .OKB, .LDR1B, .LDR2B, .DispB, .clr, .A_Attack(t_A_Attack), .seg, .an, .ST, .UART_Activate(t_UART_Activate));
+Master_Top mastertop(.clk(sclk), .A, .B(t_B), .BTN1A, .BTN1B, .BTN2A, .BTN2B, .LivB, .BTN3A, .BTN3B, .OKB, .LDR1B, .LDR2B, .DispB, .clr, .A_Attack(t_A_Attack), .seg, .an, .ST, .UART_Activate(t_UART_Activate));
 
 
 endmodule
