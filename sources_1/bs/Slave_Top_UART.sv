@@ -29,8 +29,8 @@ module Slave_Top_UART(
     output BTN3B
     );
 
-logic sclk;
-ClockDiv #(2000) uartClk(.clk, .sclk(sclk));
+logic sclk; // sclk for battleship to run at 1/2000 of UART (UART takes 1600 clk cycles to process 16 bits)
+ClockDiv #(2000) bsClk(.clk, .sclk(sclk));
 
 logic [15:0] t_A;
 UART_Rec #(16,100) rec(.clk, .bsIn(MasSlav_A), .recSig(MasSlav_Sig), .data(t_A));

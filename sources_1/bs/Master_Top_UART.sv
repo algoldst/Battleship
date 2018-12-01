@@ -7,7 +7,7 @@
  */
 
 module Master_Top_UART(
-    input clk,
+    input topclk,
     input [15:0] A,
     input SlavMas_B, //bitstream from slave-->master, receives B from Slave via UART_Rec
     input SlavMas_Sig, //receiving signal slave-->master for UART_Rec
@@ -30,9 +30,15 @@ module Master_Top_UART(
     output ST,
     output sendClk //to send clk signal to slave basys
         );
+        
+// Divide topclk (100 MHz) to get a new base frequency for all modules to reference, clk.
+logic clk;
+ClockDiv #(200) topclkDiv(.clk(topclk), .sclk(clk)); // Prof. Benson said to use < 9kHz top clk for working UART.
 assign sendClk = clk;
-logic sclk;
-ClockDiv #(2000) uartClk(.clk, .sclk(sclk));
+        
+// Divide clk into sclk for Battleship to reference. UART will take (16 bits)*(100clk cycles)=1600 clk cycles to send/receive, so we will divide by 2000 to be safe.
+logic sclk; // sclk for master_top
+ClockDiv #(2000) bsClk(.clk, .sclk(sclk));
 
 // UART for B input
 logic [15:0] t_B; //interconnect uart_rec-->mastertop
