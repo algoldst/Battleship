@@ -18,7 +18,7 @@ module Slave_Top(
     input LDR2B,
     input clr,
     input ST,
-    input DispB,
+    input [2:0] DispB,
     input BTN1B_IN,
     input BTN2B_IN,
     input BTN3B_IN,
