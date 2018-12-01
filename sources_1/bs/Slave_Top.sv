@@ -12,7 +12,9 @@ module Slave_Top(
     input clk,
     input [15:0] A,
     input [15:0] B,
-    input LDR1B,
+    //input LDR1B,
+    //LDR1B is alwasy high because of delays to loading register one.
+    //Register still holds correct value due to logic of the ckt.
     input LDR2B,
     input clr,
     input ST,
@@ -37,7 +39,7 @@ module Slave_Top(
     mux2_1 #16 mux1(.A(B), .B(t6), .SEL(ST), .an(t1));
     
     //This register saves the ship positions of player B
-    Register #16 R1B(.clk(clk), .D(t1), .en(LDR1B), .clr(clr), .Q(t2));
+    Register #16 R1B(.clk(clk), .D(t1), .en(1), .clr(clr), .Q(t2));
     
     //This register saves the attack positions of player B
     Register #16 R2B(.clk(clk), .D(B), .en(LDR2B), .clr(clr), .Q(t4));

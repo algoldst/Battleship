@@ -49,7 +49,7 @@ module Master_Top(
         BattleshipFSM FSM(.clk(clk), .BTN1(t1), .BTN2A(BTN2A), .BTN2B(BTN2B), .LivA(~t13), .LivB(LivB), .clr(t2), .OKA(t12), .OKB(OKB), .LDR1B(LDR1B), .LDR2B(LDR2B), .DispB(DispB), .ST(t3), .LDR1A(t4), .LDR2A(t5), .DispA(t6));
         
         //This register saves the ship positions of player A
-        Register #16 R1A(.clk(clk), .D(t7), .en(t4), .clr(t2), .Q(t8));
+        Register #16 R1A(.clk(clk), .D(t7), .en(1), .clr(t2), .Q(t8));
         
         //This register saves the attack positions of player A
         Register #16 R2A(.clk(clk), .D(A), .en(t5), .clr(t2), .Q(A_Attack));

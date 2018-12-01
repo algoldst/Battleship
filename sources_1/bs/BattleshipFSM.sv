@@ -26,7 +26,7 @@ module BattleshipFSM(
     output logic ST,
     output logic LDR1A,
     output logic LDR2A,
-    output logic DispA
+    output logic [2:0] DispA
     );
     
     logic [3:0] NS;
@@ -40,7 +40,7 @@ module BattleshipFSM(
                           begin
                               PS <= NS;
                               if (clr==1)
-                                PS=load_st;
+                                PS <=load_st;
                           end
      
      
@@ -67,7 +67,7 @@ module BattleshipFSM(
                 DispB=0;
                 if (BTN1==1)
                     NS=playerA_LD;
-                else
+				else
                     NS=load_st;
                 end    
             
@@ -79,6 +79,10 @@ module BattleshipFSM(
                 DispB=2;
                 if (BTN2A==1)
                     NS=playerA_Attack;
+				else if (LivA==0)
+						NS=playerB_win;
+				else if (LivB==0)
+							NS=playerA_win;
                 else
                     NS=playerA_LD;
                 end
@@ -91,8 +95,14 @@ module BattleshipFSM(
                 //Moves out of this state depending on output of the input checker.
                 LDR2A=1;
                 LDR1B=1;
+				DispA=1;
+				DispB=2;
                 if (OKA==1)
                     NS=playerB_LD;
+				else if (LivA==0)
+						NS=playerB_win;
+				else if (LivB==0)
+							NS=playerA_win;
                 else
                     NS=Redo_playerA;
                 end                    
@@ -115,6 +125,10 @@ module BattleshipFSM(
                 DispB=1;
                 if (BTN2B==1)
                     NS=playerB_Attack;
+				else if (LivA==0)
+						NS=playerB_win;
+				else if (LivB==0)
+							NS=playerA_win;
                 else
                     NS=playerB_LD;
                 end 
@@ -127,8 +141,14 @@ module BattleshipFSM(
                     //Moves out of this state depending on output of the input checker.
                     LDR2B=1;
                     LDR1A=1;
+					DispA=2;
+					DispB=1;
                     if (OKB==1)
                         NS=playerA_LD;
+					else if (LivA==0)
+						NS=playerB_win;
+					else if (LivB==0)
+							NS=playerA_win;
                     else
                         NS=Redo_playerB;
                     end                    
@@ -142,6 +162,20 @@ module BattleshipFSM(
                     DispB=5;
                     NS=playerB_LD;
                     end
+					
+				playerA_win:
+					begin
+					//this displays that player A won and player B lost.
+					DispA=3;
+					DispB=4;
+					end
+					
+				playerB_win:
+					begin
+					//this displays that player A won and player B lost.
+					DispA=4;
+					DispB=3;
+					end
                     
      endcase               
      end                                                      

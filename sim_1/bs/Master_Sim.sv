@@ -31,6 +31,7 @@ logic [15:0] A_Attack;
 logic [7:0] seg;
 logic [3:0] an;
 logic ST;
+logic UART_Activate;
 
 // Simulate clk
 always
@@ -46,24 +47,33 @@ initial
 	//CLR is high. All registers cleared. FSM State: load_st
     #10;
     A=16'b 1110011000000110; B=16'b 0011000011100110;
-    BTN1A=1; BTN1B=1; BTN2A=0; BTN2B=0; BTN3A=1; BTN3B=1;
+    BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=1; BTN3B=1;
     LivB=1; OKB=0;
     #10;
     
 	//Players load ship positions. FSM State: load_st
     A=16'b 1110011000000110; B=16'b 0011000011100110;
-    BTN1A=1; BTN1B=1; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+    BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
     LivB=1; OKB=1;
     #10;
     
+	//Player ship positions loaded.
+	//FSM moves out of load state. FSM State: playerA_LD
+    A=16'b 1110011000000110; B=16'b 0011000011100110;
+    BTN1A=1; BTN1B=1; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+    LivB=1; OKB=1;
+    #10;
+	
+	//ROUND1
+	
 	//Player A selects where to attack. FSM state: playerA_LD
-    A=16'b 1000000000000000; B=16'b 0000000000000000;
+    A=16'b 1110011000000110; B=16'b 0000000000000000;
     BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
     LivB=1; OKB=1;
     #10;
     
 	//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
-		//Player A only changed one bit so OKA=1. Game moves on to Player B.
+		//Player A only changed one bit so OKB=1. Game moves on to Player B.
     A=16'b 1000000000000000; B=16'b 0000000000000000;
     BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
     LivB=1; OKB=1;
@@ -88,70 +98,213 @@ initial
     BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
     LivB=1; OKB=1;
     #10;
+	
+	//ROUND2
+	
 			//Player A selects where to attack. FSM state: playerA_LD
-			A=16'b 1100000000000000; B=16'b 0000000000000000;
+			A=16'b 1100000000000000; B=16'b 0010000000000000;
 			BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 			LivB=1; OKB=1;
 			#10;
 			
 			//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
 				//Player A only changed one bit so OKA=1. Game moves on to Player B.
-			A=16'b 1000000000000000; B=16'b 0000000000000000;
+			A=16'b 1100000000000000; B=16'b 0010000000000000;
 			BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
 			LivB=1; OKB=1;
 			#10;
 			
 			//Player B is notified that they can play. FSM State: playerB_LD
-			A=16'b 1000000000000000; B=16'b 0000000000000000;
+			A=16'b 1100000000000000; B=16'b 0010000000000000;
 			BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 			LivB=1; OKB=1;
 			#10;
 			
 			//Player B selects where to attack. FSM State: playerB_LD
-			A=16'b 1000000000000000; B=16'b 0011000000000000;
+			A=16'b 1100000000000000; B=16'b 0110000000000000;
 			BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
 			LivB=1; OKB=1;
 			#10;
 			
 			//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
 				//Player B only changed one bit so OKB=1. Game moves on to Player A.
-			A=16'b 1000000000000000; B=16'b 0011000000000000;
+			A=16'b 1100000000000000; B=16'b 0110000000000000;
 			BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 			LivB=1; OKB=1;
 			#10;
+	
+	//ROUND3
 					
 					//Player A selects where to attack. FSM state: playerA_LD
-					A=16'b 1100000000000000; B=16'b 0000000000000000;
+					A=16'b 1100000000000010; B=16'b 0110000000000000;
 					BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 					LivB=1; OKB=1;
 					#10;
 				
 					//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
 						//Player A only changed one bit so OKA=1. Game moves on to Player B.
-					A=16'b 1000000000000000; B=16'b 0000000000000000;
+					A=16'b 1100000000000010; B=16'b 0110000000000000;
 					BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
 					LivB=1; OKB=1;
 					#10;
 					
 					//Player B is notified that they can play. FSM State: playerB_LD
-					A=16'b 1000000000000000; B=16'b 0000000000000000;
+					A=16'b 1100000000000010; B=16'b 0110000000000000;
 					BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 					LivB=1; OKB=1;
 					#10;
 					
 					//Player B selects where to attack. FSM State: playerB_LD
-					A=16'b 1000000000000000; B=16'b 0011000000000000;
+					A=16'b 1100000000000010; B=16'b 0110000000000010;
 					BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
 					LivB=1; OKB=1;
 					#10;
 					
 					//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
 						//Player B only changed one bit so OKB=1. Game moves on to Player A.
-					A=16'b 1000000000000000; B=16'b 0011000000000000;
+					A=16'b 1100000000000010; B=16'b 0110000000000010;
 					BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
 					LivB=1; OKB=1;
 					#10;
+
+	//ROUND4
+					
+							//Player A selects where to attack. FSM state: playerA_LD
+							A=16'b 1100000000000110; B=16'b 0110000000000010;
+							BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+							LivB=1; OKB=1;
+							#10;
+						
+							//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
+								//Player A only changed one bit so OKA=1. Game moves on to Player B.
+							A=16'b 1100000000000110; B=16'b 0110000000000010;
+							BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
+							LivB=1; OKB=1;
+							#10;
+							
+							//Player B is notified that they can play. FSM State: playerB_LD
+							A=16'b 1100000000000110; B=16'b 0110000000000010;
+							BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+							LivB=1; OKB=1;
+							#10;
+							
+							//Player B selects where to attack. FSM State: playerB_LD
+							A=16'b 1100000000000110; B=16'b 0110000000000110;
+							BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
+							LivB=1; OKB=1;
+							#10;
+							
+							//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
+								//Player B only changed one bit so OKB=1. Game moves on to Player A.
+							A=16'b 1100000000000110; B=16'b 0110000000000110;
+							BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+							LivB=1; OKB=1;
+							#10;
+							
+	//ROUND5
+							
+									//Player A selects where to attack. FSM state: playerA_LD
+									A=16'b 1110000000000110; B=16'b 0110000000000110;
+									BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+									LivB=1; OKB=1;
+									#10;
+								
+									//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
+										//Player A only changed one bit so OKA=1. Game moves on to Player B.
+									A=16'b 1110000000000110; B=16'b 0110000000000110;
+									BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
+									LivB=1; OKB=1;
+									#10;
+									
+									//Player B is notified that they can play. FSM State: playerB_LD
+									A=16'b 1110000000000110; B=16'b 0110000000000110;
+									BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+									LivB=1; OKB=1;
+									#10;
+									
+									//Player B selects where to attack. FSM State: playerB_LD
+									A=16'b 1110000000000110; B=16'b 1110000000000110;
+									BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
+									LivB=1; OKB=1;
+									#10;
+									
+									//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
+										//Player B only changed one bit so OKB=1. Game moves on to Player A.
+									A=16'b 1110000000000110; B=16'b 1110000000000110;
+									BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+									LivB=1; OKB=1;
+									#10;
 	
+	//ROUND6
+	
+											//Player A selects where to attack. FSM state: playerA_LD
+											A=16'b 1110010000000110; B=16'b 1110000000000110;
+											BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+											LivB=1; OKB=1;
+											#10;
+										
+											//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
+												//Player A only changed one bit so OKA=1. Game moves on to Player B.
+											A=16'b 1110010000000110; B=16'b 1110000000000110;
+											BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
+											LivB=1; OKB=1;
+											#10;
+											
+											//Player B is notified that they can play. FSM State: playerB_LD
+											A=16'b 1110010000000110; B=16'b 1110000000000110;
+											BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+											LivB=1; OKB=1;
+											#10;
+											
+											//Player B selects where to attack. FSM State: playerB_LD
+											A=16'b 1110010000000110; B=16'b 1110010000000110;
+											BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
+											LivB=1; OKB=1;
+											#10;
+											
+											//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
+												//Player B only changed one bit so OKB=1. Game moves on to Player A.
+											A=16'b 1110010000000110; B=16'b 1110010000000110;
+											BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+											LivB=1; OKB=1;
+											#10;
+											
+	//ROUND7
+	
+													//Player A selects where to attack. FSM state: playerA_LD
+													A=16'b 1110011000000110; B=16'b 1110010000000110;
+													BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+													LivB=1; OKB=1;
+													#10;
+												
+													//Player A attack position pushed to slave board. FSM State: PlayerA_Attack
+														//Player A only changed one bit so OKA=1.
+													A=16'b 1110011000000110; B=16'b 1110010000000110;
+													BTN1A=0; BTN1B=0; BTN2A=1; BTN2B=0; BTN3A=0; BTN3B=0; 
+													LivB=1; OKB=1;
+													#10;
+													
+													//Player B is notified that they can play. FSM State: playerB_LD
+													A=16'b 1110010000000110; B=16'b 1110010000000110;
+													BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+													LivB=1; OKB=1;
+													#10;
+													
+													//Player B selects where to attack. FSM State: playerB_LD
+													A=16'b 1110010000000110; B=16'b 1110011000000110;
+													BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=1; BTN3A=0; BTN3B=0; 
+													LivB=1; OKB=1;
+													#10;
+													
+													//Player B attack position pushed to slave board. FSM State: PlayerB_Attack
+														//Player B only changed one bit so OKB=1. Game moves on to Player A.
+													A=16'b 1110010000000110; B=16'b 1110011000000110;
+													BTN1A=0; BTN1B=0; BTN2A=0; BTN2B=0; BTN3A=0; BTN3B=0; 
+													LivB=1; OKB=1;
+													#10;
+													
+													//clear everything because game is over
+													BTN3A=1; BTN3B=1;
 	
     
     end

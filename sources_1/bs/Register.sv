@@ -19,9 +19,9 @@ module Register #(parameter WIDTH = 4)
     always_ff @ (posedge clk, negedge clr)
     begin
         if(clr)
-            Q=0;
+            Q<=0;
         else if(en)
-            Q=D;
+            Q<=D;
     end
     
 endmodule
