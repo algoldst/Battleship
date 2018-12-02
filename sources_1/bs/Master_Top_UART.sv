@@ -28,7 +28,8 @@ module Master_Top_UART(
     output [7:0] seg,
     output [3:0] an,
     output ST,
-    output sendClk //to send clk signal to slave basys
+    output sendClk, //to send clk signal to slave basys
+    output [15:0] Breceived //For testing purposes, holds B received via UART to display on LEDs
         );
         
 // Divide topclk (100 MHz) to get a new base frequency for all modules to reference, clk.
@@ -38,16 +39,17 @@ assign sendClk = clk;
         
 // Divide clk into sclk for Battleship to reference. UART will take (16 bits)*(100clk cycles)=1600 clk cycles to send/receive, so we will divide by 2000 to be safe.
 logic sclk; // sclk for master_top
-ClockDiv #(2000) bsClk(.clk, .sclk(sclk));
+ClockDiv #(4000) bsClk(.clk, .sclk(sclk));
 
 // UART for B input
 logic [15:0] t_B; //interconnect uart_rec-->mastertop
 UART_Rec #(16,100) rec(.clk, .bsIn(SlavMas_B), .recSig(SlavMas_Sig), .data(t_B));    
+assign Breceived = t_B;
 
 // UART for A_Attack output    
 logic t_UART_Activate; //interconnects mastertop<-->uart_trans
 logic [15:0] t_A_Attack;
-UART_Trans #(16,100,1) trans(.clk, .data(t_A_Attack), .sendBtn(t_UART_Activate), .bsOut(MasSlav_A_Attack), .sendSig(MasSlav_Sig));
+UART_Trans #(16,100,0) trans(.clk, .data(t_A_Attack), .sendBtn(t_UART_Activate), .bsOut(MasSlav_A_Attack), .sendSig(MasSlav_Sig));
 
 Master_Top mastertop(.clk(sclk), .A, .B(t_B), .BTN1A, .BTN1B, .BTN2A, .BTN2B, .LivB, .BTN3A, .BTN3B, .OKB, .LDR1B, .LDR2B, .DispB, .clr, .A_Attack(t_A_Attack), .seg, .an, .ST, .UART_Activate(t_UART_Activate));
 
