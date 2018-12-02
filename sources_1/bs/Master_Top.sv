@@ -41,7 +41,7 @@ module Master_Top(
         //controls the clearing af the FSM and all of the registers.
         assign t2 = BTN3A & BTN3B;
         //locates all of the positions where player A has been hit.
-        assign t10 = t8 & t9;
+        assign t10 = t8 & B;
         //kills of all of the values where player A has been hit to push back to register 1A.
         assign t11 = t8 ^ t10;
         
@@ -74,5 +74,8 @@ module Master_Top(
         
         //assign ST output
         assign ST = t3;
+        
+        //assign UART_Activate to get triggered by t5
+        assign UART_Activate = t5;
         
 endmodule
