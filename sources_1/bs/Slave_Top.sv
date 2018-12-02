@@ -51,7 +51,7 @@ module Slave_Top(
     InputChecker ICA(.A(t3), .B(A), .OK(t7));
     
     //locates all of the positions where player B has been hit.
-    assign t5 = t2 & t3;
+    assign t5 = t2 & A;
     //kills of all of the values where player B has been hit to push back to register 1B.
     assign t6 = t2 ^ t5;
     

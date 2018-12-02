@@ -26,17 +26,19 @@ module Slave_Top_UART(
     output [3:0] an,
     output BTN1B,
     output BTN2B,
-    output BTN3B
+    output BTN3B,
+    output [15:0] Areceived //For testing purposes, receives the value of t_A to display on the LEDs.
     );
 
 logic sclk; // sclk for battleship to run at 1/2000 of UART (UART takes 1600 clk cycles to process 16 bits)
-ClockDiv #(2000) bsClk(.clk, .sclk(sclk));
+ClockDiv #(4000) bsClk(.clk, .sclk(sclk));
 
 logic [15:0] t_A;
 UART_Rec #(16,100) rec(.clk, .bsIn(MasSlav_A), .recSig(MasSlav_Sig), .data(t_A));
+assign Areceived = t_A;
 
 logic [15:0] t_B_Attack;
-UART_Trans #(16,100,1) trans(.clk, .data(t_B_Attack), .sendBtn(LDR2B), .bsOut(SlavMas_B_Attack), .sendSig(SlavMas_Sig));
+UART_Trans #(16,100,0) trans(.clk, .data(t_B_Attack), .sendBtn(LDR2B), .bsOut(SlavMas_B_Attack), .sendSig(SlavMas_Sig));
 
 Slave_Top slave_top(.clk(sclk), .A(t_A), .B_Attack(t_B_Attack), .*);
 

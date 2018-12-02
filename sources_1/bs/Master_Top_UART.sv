@@ -33,7 +33,7 @@ module Master_Top_UART(
         
 // Divide topclk (100 MHz) to get a new base frequency for all modules to reference, clk.
 logic clk;
-ClockDiv #(200) topclkDiv(.clk(topclk), .sclk(clk)); // Prof. Benson said to use < 9kHz top clk for working UART.
+ClockDiv #(20) topclkDiv(.clk(topclk), .sclk(clk)); // 5MHz, Prof. Benson said to use < 9kHz top clk for working UART.
 assign sendClk = clk;
         
 // Divide clk into sclk for Battleship to reference. UART will take (16 bits)*(100clk cycles)=1600 clk cycles to send/receive, so we will divide by 2000 to be safe.
