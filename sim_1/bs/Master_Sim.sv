@@ -304,7 +304,7 @@ initial
 													#10;
 													
 													//clear everything because game is over
-													BTN3A=1; BTN3B=1;
+													//BTN3A=1; BTN3B=1;
 	
     
     end
