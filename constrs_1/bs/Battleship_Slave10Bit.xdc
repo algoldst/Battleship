@@ -135,8 +135,8 @@ set_property PACKAGE_PIN J2 [get_ports {DispB[1]}]
 set_property PACKAGE_PIN G2 [get_ports {DispB[2]}]					
 	set_property IOSTANDARD LVCMOS33 [get_ports {DispB[2]}]
 #Sch name = JA7
-set_property PACKAGE_PIN H1 [get_ports {LDR1B}]					
-	set_property IOSTANDARD LVCMOS33 [get_ports {LDR1B}]
+#set_property PACKAGE_PIN H1 [get_ports {LDR1B}]					
+#	set_property IOSTANDARD LVCMOS33 [get_ports {LDR1B}]
 ###Sch name = JA8
 set_property PACKAGE_PIN K2 [get_ports {LDR2B}]					
 	set_property IOSTANDARD LVCMOS33 [get_ports {LDR2B}]
@@ -180,9 +180,9 @@ set_property PACKAGE_PIN C16 [get_ports {B_Attack[7]}]
 #Pmod Header JC
 #Sch name = JC1
 set_property PACKAGE_PIN K17 [get_ports {B_Attack[8]}]					
-	set_property IOSTANDARD LVCMOS33 [get_ports {B_Attack[9]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {B_Attack[8]}]
 #Sch name = JC2
-set_property PACKAGE_PIN M18 [get_ports {B_Attack[8]}]					
+set_property PACKAGE_PIN M18 [get_ports {B_Attack[9]}]					
 	set_property IOSTANDARD LVCMOS33 [get_ports {B_Attack[9]}]
 #Sch name = JC3
 set_property PACKAGE_PIN N17 [get_ports {A[0]}]					
