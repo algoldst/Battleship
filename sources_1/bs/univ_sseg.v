@@ -234,7 +234,7 @@ module clk_divder(clockin, clockout);
     input clockin; 
     output wire clockout; 
 
-    parameter n = 1; 
+    parameter n = 13; 
     reg [n:0] count; 
 
     always@(posedge clockin) 

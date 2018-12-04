@@ -27,8 +27,8 @@ module Master_Top10Bit(
         output [9:0] A_Attack, //master-->slave, signal from t5 on LDR2A (look at fsm)
         output [7:0] seg,
         output [3:0] an,
-        output ST
-        
+        output ST,
+        output [9:0] Aleds //for testing
         );
         
         //declare all of the interconnects
@@ -50,9 +50,12 @@ module Master_Top10Bit(
         
         //This register saves the ship positions of player A
         Register #10 R1A(.clk(clk), .D(t7), .en(1), .clr(t2), .Q(t8));
+        assign Aleds = t8;
         
         //This register saves the attack positions of player A
-        Register #10 R2A(.clk(clk), .D(A), .en(t5), .clr(t2), .Q(A_Attack));
+        logic [9:0] t_A_Attack;
+        Register #10 R2A(.clk(clk), .D(A), .en(t5), .clr(t2), .Q(t_A_Attack));
+        assign A_Attack = t_A_Attack;
         
         //This register saves the previous attack positions of player B to feed into the input checker.
         Register #10 R3A(.clk(clk), .D(B), .en(t12), .clr(t2), .Q(t9));
@@ -74,5 +77,8 @@ module Master_Top10Bit(
         
         //assign ST output
         assign ST = t3;
+        
+        //assign A_ships output
+        //assign A_Ships = t8;
         
 endmodule
