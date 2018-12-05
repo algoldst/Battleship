@@ -27,19 +27,22 @@ module Slave_Top_UART(
     output BTN1B,
     output BTN2B,
     output BTN3B,
-    output [15:0] Areceived //For testing purposes, receives the value of t_A to display on the LEDs.
+    output [15:0] Bleds
+    //output [15:0] Areceived //For testing purposes, receives the value of t_A to display on the LEDs.
     );
 
-logic sclk; // sclk for battleship to run at 1/2000 of UART (UART takes 1600 clk cycles to process 16 bits)
-ClockDiv #(4000) bsClk(.clk, .sclk(sclk));
+// I think the UART was failing before because, even with an sclk for the bs game logic, there are still times where the game will query for a value before the UART has received the full value. So, I'm going to try diverting the clock when the UART is receiving.
+logic divClk;
+logic t_MasSlav_Sig = MasSlav_Sig;
+ClockDivert #(2000) clkdiv(.clk, .divertSig(t_MasSlav_Sig), .divClk(divClk));
 
 logic [15:0] t_A;
-UART_Rec #(16,100) rec(.clk, .bsIn(MasSlav_A), .recSig(MasSlav_Sig), .data(t_A));
-assign Areceived = t_A;
+UART_Rec #(16,100) rec(.clk, .bsIn(MasSlav_A), .recSig(t_MasSlav_Sig), .data(t_A));
+//assign Areceived = t_A;
 
 logic [15:0] t_B_Attack;
 UART_Trans #(16,100,0) trans(.clk, .data(t_B_Attack), .sendBtn(LDR2B), .bsOut(SlavMas_B_Attack), .sendSig(SlavMas_Sig));
 
-Slave_Top slave_top(.clk(sclk), .A(t_A), .B_Attack(t_B_Attack), .*);
+Slave_Top slave_top(.clk(divClk), .A(t_A), .B_Attack(t_B_Attack), .*);
 
 endmodule
