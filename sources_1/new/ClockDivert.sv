@@ -20,22 +20,27 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ClockDivert #(parameter cyclesDiv)( //cycles to divert
+module ClockDivert #(parameter cyclesDiv=2000)( //cycles to divert
     input clk, divertSig, //signal that the UART receives, this signals the start of incoming data
     output logic divClk
     );
-
-logic cycles = 0; //counter for # of cycles since divertSig went high
+logic [25:0] setupCycles = 10000000;
+logic [15:0] cyclesSkipped = 0; //counter for # of cycles since divertSig went high
 //logic clkOn = 1;
 always_ff @(posedge clk)
     begin
-    if(!divertSig && cycles == 0) divClk = ~divClk;
+    if(setupCycles != 0) 
+        begin
+        divClk = ~divClk;
+        setupCycles = setupCycles-1;
+        end
+    else if(!divertSig && cyclesSkipped == 0) divClk = ~divClk;
     else
         begin
         divClk = 0;
-        cycles++;
+        cyclesSkipped++;
         end
-    if(cycles == cyclesDiv*2) cycles = 0;
+    if(cyclesSkipped == cyclesDiv*2) cyclesSkipped = 0;
     end
 /*
 begin
