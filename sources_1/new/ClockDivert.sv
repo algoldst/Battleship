@@ -26,8 +26,18 @@ module ClockDivert #(parameter cyclesDiv)( //cycles to divert
     );
 
 logic cycles = 0; //counter for # of cycles since divertSig went high
-logic clkOn = 1;
+//logic clkOn = 1;
 always_ff @(posedge clk)
+    begin
+    if(!divertSig && cycles == 0) divClk = ~divClk;
+    else
+        begin
+        divClk = 0;
+        cycles++;
+        end
+    if(cycles == cyclesDiv*2) cycles = 0;
+    end
+/*
 begin
     if(cycles == cyclesDiv) cycles = 0; 
     if(divertSig || cycles != 0) cycles++;
@@ -38,5 +48,6 @@ begin
     if(!divertSig && cycles == 0) divClk = clk;
     else divClk = 0;
 end
+*/
     
 endmodule
