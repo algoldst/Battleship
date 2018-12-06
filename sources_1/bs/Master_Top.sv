@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Master_Top10Bit(
+module Master_Top(
         input clk,
         input [9:0] A,
         input [9:0] B, //slave-->master
