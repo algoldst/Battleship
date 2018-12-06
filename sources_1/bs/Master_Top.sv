@@ -27,7 +27,9 @@ module Master_Top(
         output [9:0] A_Attack, //master-->slave, signal from t5 on LDR2A (look at fsm)
         output [7:0] seg,
         output [3:0] an,
-        output ST
+        output ST,
+        output [9:0] Aleds
+        
         
         );
         
@@ -50,6 +52,7 @@ module Master_Top(
         
         //This register saves the ship positions of player A
         Register #10 R1A(.clk(clk), .D(t7), .en(1), .clr(t2), .Q(t8));
+        assign Aleds = t8;
         
         //This register saves the attack positions of player A
         Register #10 R2A(.clk(clk), .D(A), .en(t5), .clr(t2), .Q(A_Attack));
